@@ -24,6 +24,7 @@ gLevel = {
 }
 
 function onInit() {
+    closeModal()
 
     gGame = {
         isOn: true,
@@ -124,7 +125,9 @@ function onCellClicked(elCell, i, j) {
 
     if (elCell.classList.contains('mine')) {
         console.log('STEPPED ON A MINE!')
-        // GameOver()
+        showCell(cellPos, clickedCell)
+        elCell.style.background = 'red'
+        onLoseLife()
         return
     }
     // console.log('BEFORE ENTER clickedCell', clickedCell)
@@ -141,13 +144,18 @@ function onCellClicked(elCell, i, j) {
 function renderCell(location, value) {
     const cellSelector = '.' + getClassName(location) // .cell-i-j
     const elCell = document.querySelector(cellSelector)
+    if (value === MINE) {
+        elCell.style.backgroundcolor= 'red'
+    }
     elCell.innerHTML = value
+
   }
 
 function showCell(cellPos, clickedCell) {
     // console.log('AFTER ENTER clickedCell', clickedCell)
     if (clickedCell === MINE) {
         renderCell(cellPos, MINE)
+        return
     } else if (clickedCell.minesAroundCount){
         renderCell(cellPos, clickedCell.minesAroundCount)
     }
@@ -222,5 +230,44 @@ function shownCount() {
 }
 
 
+function checkGameOver() {
+    return (gLevel.LIVES === 0)
+}
+
+function onLoseLife() {
+    gGame.isOn = false
+    gLevel.LIVES--
+    showMines()
+    // stop timer
+    if (checkGameOver())
+    {
+        onGameOver()
+    }
+    else {
+        openModal('You lost a life! \n click to try again')
+    }
+}
+
+function onGameOver() {
+    document.querySelector('.game-over').style.display = 'block'
+}
+
+
+function closeModal() {
+    document.querySelector('.modal').style.display = 'none'
+}
+
+function openModal(msg) {
+    var elModal = document.querySelector('.modal')
+    elModal.style.display = 'block'
+    elModal.innerHTML = msg
+}
+
+
+// function smileyHandling() {
+// }
+
 // bugs:
 // shownCount bugged
+
+// modal types: you win, you lose (0 lives), you lost a life

@@ -2,12 +2,17 @@
     font-family: 'Aclonica';
 }
 
+html, body{
+    height: 100%;
+}
+
 body {
     text-align: center;
     background-size: cover;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
+    background-repeat: no-repeat;
 }
 
 table,
@@ -21,7 +26,7 @@ td {
     background-color: gray;
     border-color: black;
     margin: auto;
-    font-size: 30px;
+    font-size: 22px;
     width: 30px;
     height: 30px;
     margin-top: 100px;
@@ -37,30 +42,20 @@ td {
     cursor: pointer;
 }
 
+.diffibuttons {
+    margin-bottom: 40px;
+    margin-top: 60px;
+}
+
 .diffibtn {
     border-radius: 15px;
     font-size: 20px;
-    margin-bottom: 40px;
+
     cursor: pointer;
 }
 
 
-
-footer div{
-    text-align: center;
-    display: block;
-    width: 15%;
-    font-size: 30px;
-    color: white;
-    background-color: black;
-    margin: auto;
-    margin-top: 200px;
-    border-radius: 20px;
-}
-
 .shown {
-    /* border-top: white; */
-    /* border-left: white; */
     background-color: white;
 }
 
@@ -76,3 +71,46 @@ footer div{
     background-color: black;
 }
 
+.modal, .game-over {
+    display: none;
+    text-align: center;
+    margin: auto;
+    border: solid 3px grey;
+    width: 220px;
+    height: auto;
+    background-color: rgb(222, 226, 228);
+    color: black;
+    font-size: 32px;
+    margin-top: 30px;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+
+footer {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+footer div{
+    text-align: center;
+    display: block;
+    font-size: 30px;
+    color: white;
+    background-color: black;
+    margin: auto;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.game-over {
+    padding: 20px;
+    display: none;
+    font-size: 50px;
+    background-color: red;
+}
+
+.shown-counter-test {
+    display: none;
+}
