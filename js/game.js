@@ -1,30 +1,15 @@
-// Step1 – the seed app:
-// 1. Create a 4x4 gBoard Matrix containing Objects.
-// 2. Set 2 of them to be mines
-// 3. Present the mines using renderBoard() function.
-
-// Step2 – counting neighbors:
-// 1. Create setMinesNegsCount() and store the numbers
-// 2. Update the renderBoard() function to also display
-// the neighbor count and the mines
-// 3. Add a console.log – to help you with debugging
-
-// Step3 – click to reveal:
-// 1. When clicking a cell, call the onCellClicked() function.
-// 2. Clicking a safe cell reveals the minesAroundCount of this cell
-
-// Step4 – randomize mines' location:
-// 1. Add some randomicity for mines location
-// 2. After you have this functionality working– its best to comment
-// the code and switch back to static location to
-// help you focus during the development phase
-
-// Step5 –
-// 1. Add a footer with your name
-// 2. Upload to git
+// Further:
+//
+// 1. first click is never a mine
+// (gGame.isOn: true + settin up the mines only after first click)
+// 2. 3 lives
+// lives counter etc
+// 3. add the smiley btn: normal-😃 lose(no lives left)-🤯 win-😎
 
 
-
+const SMILEY_NORM = '😃'
+const SMILEY_LOSE = '🤯'
+const SMILEY_WIN = '😎'
 const MINE = '💣'
 const FLAG =  '🚩'
 
@@ -34,9 +19,9 @@ var gLevel
 
 gLevel = {
     SIZE: 4,
-    MINES: 2
+    MINES: 2,
+    LIVES: 3
 }
-
 
 function onInit() {
 
@@ -46,13 +31,14 @@ function onInit() {
         markedCount: 0,
         secsPassed: 0
     }
-    // game on only after first click + settin up the mines
 
     gBoard = buildBoard(gLevel.SIZE)
     allPossiblePos = createPosArr(gBoard)
     // placeMinesRand(gBoard, gLevel.MINES, allPossiblePos)
     setMinesNegsCount(gBoard)
     renderBoard(gBoard)
+    // showMines()
+    // timer()
 }
 
 function buildBoard(size) {
@@ -94,12 +80,11 @@ function renderBoard(board) {
         for (var j = 0; j < board[0].length; j++) {
             var currCell = board[i][j]
             var cellClass = getClassName({ i: i, j: j }) + ' ' // 'cell-0-0 '
+            // console.log('cellClass', cellClass)
             cellClass += (currCell.isMine)? 'mine' : ''
             strHTML += `<td class="${cellClass}"
                             onclick="onCellClicked(this,${i},${j})"
                             oncontextmenu="onCellMarked(this,${i},${j}); return false;">`
-            //Reveal test:
-            // board[1][1].isShown = false
 
             if(currCell.isShown) {
                 if(currCell.isMine) {
@@ -126,11 +111,11 @@ function getClassName(location) {
 }
 
 function onCellClicked(elCell, i, j) {
-    console.log('elCell', elCell)
+    // console.log('elCell-onCellClicked', elCell)
     var cellPos = {i, j}
-    console.log('cellPos', cellPos)
+    // console.log('ONCELLCLICKED cellPos', cellPos)
     var clickedCell = gBoard[i][j]
-    // console.log('clickedCell', clickedCell)
+    // console.log('ONCELLCLICKED clickedCell', clickedCell)
 
     if (!gGame.isOn || elCell.classList.contains('marked')) {
         console.log("Game off or cell flagged!")
@@ -142,21 +127,13 @@ function onCellClicked(elCell, i, j) {
         // GameOver()
         return
     }
+    // console.log('BEFORE ENTER clickedCell', clickedCell)
+    showCell(cellPos, clickedCell)
+    clickedCell.isShown = true
 
-    if (clickedCell.minesAroundCount) {
-        showCell(cellPos, clickedCell)
-        gGame.shownCount++
+    if (!clickedCell.minesAroundCount) {
+        expandShown(gBoard, elCell, i, j)
     }
-
-    // Main algo (if num of mines exist - show, else continue)
-//     for (var i = 0; i < array.length; i++) {
-//         for (var j = 0; j < array.length; j++) {
-//             var currCell = gBoard[i][j]
-
-//             if (currCell.minesAroundCount) continue
-
-//         }
-//     }
 }
 
 
@@ -167,13 +144,20 @@ function renderCell(location, value) {
     elCell.innerHTML = value
   }
 
-function showCell(pos, clickedCell) {
+function showCell(cellPos, clickedCell) {
+    // console.log('AFTER ENTER clickedCell', clickedCell)
     if (clickedCell === MINE) {
-        renderCell(pos, MINE)
-    } else if (clickedCell){
-        gBoard[pos.i][pos.j].isShown = true
-        renderCell(pos, clickedCell.minesAroundCount)
+        renderCell(cellPos, MINE)
+    } else if (clickedCell.minesAroundCount){
+        renderCell(cellPos, clickedCell.minesAroundCount)
     }
+    //model
+    clickedCell.isShown = true
+    //DOM
+    var elCell = document.querySelector(`.cell-${cellPos.i}-${cellPos.j}`)
+    elCell.classList.add('shown')
+    // console.log('elCell - showCell', elCell)
+    gGame.shownCount++
 }
 
 function placeMinesRand(board, numOfMines, allPossiblePos) {
@@ -216,3 +200,27 @@ function onCellMarked(elCell, i, j) {
         renderCell({i,j}, '')
     }
 }
+
+// do we need elCell param?
+function expandShown(board, elCell, cellI, cellJ) {
+    for (var i = cellI - 1; i <= cellI + 1; i++) {
+        if (i < 0 || i >= board.length) continue
+        for (var j = cellJ - 1; j <= cellJ + 1; j++) {
+            if (i === cellI && j === cellJ) continue
+            if (j < 0 || j >= board[i].length) continue
+            if (board[i][j].isMine) continue
+            if (board[i][j].isShown) continue
+            showCell({i,j}, board[i][j])
+            console.log('i+j', i,j)
+            console.log('gGame.shownCount', gGame.shownCount)
+        }
+    }
+}
+
+function shownCount() {
+    console.log('gGame.shownCount', gGame.shownCount)
+}
+
+
+// bugs:
+// shownCount bugged

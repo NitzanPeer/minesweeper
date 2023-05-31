@@ -41,7 +41,6 @@ function createPosArr(board) {
     allPossiblePos = []
     for (var i = 0; i < board.length; i++) {
         for (var j = 0; j < board[i].length; j++) {
-            console.log('i, j', i, j)
             allPossiblePos.push({i, j})
         }
     }
@@ -55,4 +54,14 @@ function shuffle(array) {
         array[i] = array[j];
         array[j] = temp;
     }
+}
+
+var time = 0
+function timer() {
+    setTimeout(function() {
+        var timerDiv = document.querySelector('.timer')
+        time++;
+        timerDiv.innerHTML = time;
+        timer();
+        }, 1000)
 }

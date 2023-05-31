@@ -58,3 +58,21 @@ footer div{
     border-radius: 20px;
 }
 
+.shown {
+    /* border-top: white; */
+    /* border-left: white; */
+    background-color: white;
+}
+
+.timer {
+    margin: auto;
+    text-align: center;
+    width: 10%;
+    height: auto;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-size: 30px;
+    color: white;
+    background-color: black;
+}
+
