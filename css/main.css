@@ -1,0 +1,60 @@
+* {
+    font-family: 'Aclonica';
+}
+
+body {
+    text-align: center;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+}
+
+table,
+tr,
+td {
+    table-layout: fixed;
+    width: 100%;
+    min-width: max-content;
+    border: 1px solid black;
+    border-collapse: collapse;
+    background-color: gray;
+    border-color: black;
+    margin: auto;
+    font-size: 30px;
+    width: 30px;
+    height: 30px;
+    margin-top: 100px;
+    /* border-width: 10px; */
+}
+
+table {
+    border-width: 10px;
+}
+
+td {
+    padding: 15px;
+    cursor: pointer;
+}
+
+.diffibtn {
+    border-radius: 15px;
+    font-size: 20px;
+    margin-bottom: 40px;
+    cursor: pointer;
+}
+
+
+
+footer div{
+    text-align: center;
+    display: block;
+    width: 15%;
+    font-size: 30px;
+    color: white;
+    background-color: black;
+    margin: auto;
+    margin-top: 200px;
+    border-radius: 20px;
+}
+
