@@ -4,19 +4,35 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+function isCellMarked(elCell){
+    return isElHasClass(elCell, 'marked')
+}
 
+function isCellHasMine(elCell){
+    return isElHasClass(elCell, 'mine')
+}
+
+function isElHasClass(el, className){
+    return el.classList.contains(className)
+}
 
 function renderTimer() {
     var gElTimer = document.querySelector('.timer')
-    var stopWatch = (gTimer / 1000).toFixed(3)
+    var stopWatch = (gTimer / 1000).toFixed(0)
     gElTimer.innerText = stopWatch
 }
 
 function startTimer() {
-    gIntervalIdBall = setInterval(() => {
-    gTimer += 10
+    gIntervalId = setInterval(() => {
+    gTimer += 1000
     renderTimer()
-    }, 10)
+    }, 1000)
+}
+
+function restartTimer() {
+    gTimer = 0
+    renderTimer()
+    clearInterval(gIntervalId)
 }
 
 function countNegs(cellI, cellJ, board) {
@@ -54,14 +70,4 @@ function shuffle(array) {
         array[i] = array[j];
         array[j] = temp;
     }
-}
-
-var time = 0
-function timer() {
-    setTimeout(function() {
-        var timerDiv = document.querySelector('.timer')
-        time++;
-        timerDiv.innerHTML = time;
-        timer();
-        }, 1000)
 }

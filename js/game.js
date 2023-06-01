@@ -1,21 +1,21 @@
-// Further:
-//
-// 1. first click is never a mine
-// (gGame.isOn: true + settin up the mines only after first click)
-// 2. 3 lives
-// lives counter etc
-// 3. add the smiley btn: normal-😃 lose(no lives left)-🤯 win-😎
+const debugMode = false
 
 
 const SMILEY_NORM = '😃'
 const SMILEY_LOSE = '🤯'
 const SMILEY_WIN = '😎'
 const MINE = '💣'
+// const MINE = '<img src="img/mine1.jpg">'
 const FLAG =  '🚩'
+const DARKMODE_SELECTORS = ['table', '.diff1', '.diff2', '.diff3', '.lives', '.smiley']
 
 var gBoard
 var gGame
 var gLevel
+// timer:
+var gIntervalId = null
+var gTimer = 0
+
 
 gLevel = {
     SIZE: 4,
@@ -24,22 +24,21 @@ gLevel = {
 }
 
 function onInit() {
-    closeModal()
 
     gGame = {
         isOn: true,
+        isFirstClick: true,
+        isDarkMode: false,
         shownCount: 0,
         markedCount: 0,
         secsPassed: 0
     }
 
+    restartTimer()
+    smileyHandle('normal')
+
     gBoard = buildBoard(gLevel.SIZE)
-    allPossiblePos = createPosArr(gBoard)
-    // placeMinesRand(gBoard, gLevel.MINES, allPossiblePos)
-    setMinesNegsCount(gBoard)
     renderBoard(gBoard)
-    // showMines()
-    // timer()
 }
 
 function buildBoard(size) {
@@ -51,24 +50,20 @@ function buildBoard(size) {
                 minesAroundCount: 4,
                 isShown: false,
                 isMine: false,
-                isMarked: true
+                isMarked: false
             }
         }
     }
-    // Hard coded mines:
-    board[1][1].isMine = true
-    board[2][2].isMine = true
 
     console.log('board', board)
     return board
 }
 
-// Updates the num of mines around in every cell
+// Updates the num of mines around every cell
 function setMinesNegsCount(board) {
     for (var i = 0; i < board.length; i++) {
         for (var j = 0; j < board.length; j++) {
             var minesNegsCount = countNegs(i, j, board)
-            // console.log('minesNegsCount', minesNegsCount)
             board[i][j].minesAroundCount = minesNegsCount
         }
     }
@@ -82,28 +77,49 @@ function renderBoard(board) {
             var currCell = board[i][j]
             var cellClass = getClassName({ i: i, j: j }) + ' ' // 'cell-0-0 '
             // console.log('cellClass', cellClass)
-            cellClass += (currCell.isMine)? 'mine' : ''
+            // cellClass += (currCell.isMine)? 'mine' : ''
             strHTML += `<td class="${cellClass}"
                             onclick="onCellClicked(this,${i},${j})"
-                            oncontextmenu="onCellMarked(this,${i},${j}); return false;">`
+                            oncontextmenu="onCellMarked(this,${i},${j}); return false;"></td>`
 
-            if(currCell.isShown) {
-                if(currCell.isMine) {
-                    strHTML += MINE
-                } else if (currCell.minesAroundCount) {
-                    strHTML += currCell.minesAroundCount
-                } else {
-                    strHTML += ''
-                }
-                strHTML += '</td>'
-            } else {
-                strHTML += ''
-            }
+            // if(currCell.isShown) {
+            //     if(currCell.isMine) {
+            //         strHTML += MINE
+            //     } else if (currCell.minesAroundCount) {
+            //         strHTML += currCell.minesAroundCount
+            //     } else {
+            //         strHTML += ''
+            //     }
+            //     strHTML += '</td>'
+            // } else {
+            //     strHTML += ''
+            // }
         }
         strHTML += '</tr>'
     }
     document.querySelector('.board').innerHTML = strHTML
     // console.log('board', board)
+}
+
+function boardPlacement(firstClickPos){
+    console.log('BOARDPLACEMENT FIRSTCLICK', firstClickPos)
+    if(debugMode){
+        // Hard coded mines:
+        gBoard[1][1].isMine = true
+        gBoard[2][2].isMine = true
+        document.querySelector(`.cell-1-1`).classList.add('mine')
+        document.querySelector(`.cell-2-2`).classList.add('mine')
+    }else{
+        allPossiblePos = createPosArr(gBoard)
+        // in order to not place a mine on the user's first click:
+        console.log('allPossiblePos', allPossiblePos)
+        console.log('firstClickPos', firstClickPos)
+        removeFirstClickPos(allPossiblePos, firstClickPos)
+        // allPossiblePos.splice(0, 1, firstClickPos)
+        placeMinesRand(gBoard, gLevel.MINES, allPossiblePos)
+    }
+
+    setMinesNegsCount(gBoard)
 }
 
 function getClassName(location) {
@@ -112,55 +128,58 @@ function getClassName(location) {
 }
 
 function onCellClicked(elCell, i, j) {
-    // console.log('elCell-onCellClicked', elCell)
     var cellPos = {i, j}
-    // console.log('ONCELLCLICKED cellPos', cellPos)
     var clickedCell = gBoard[i][j]
-    // console.log('ONCELLCLICKED clickedCell', clickedCell)
 
-    if (!gGame.isOn || elCell.classList.contains('marked')) {
-        console.log("Game off or cell flagged!")
+    if (!gGame.isOn || isCellMarked(elCell) || clickedCell.isShown) {
+        console.log("Game off or cell flagged or cell is shown!")
         return
     }
 
-    if (elCell.classList.contains('mine')) {
+    if(gGame.isFirstClick){
+        gGame.isOn = true
+        console.log('CELLCLICKED FIRST')
+        onFirstClicked(cellPos)
+    }
+
+    showCell(cellPos, clickedCell, true)
+
+    if (isCellHasMine(elCell)) {
         console.log('STEPPED ON A MINE!')
-        showCell(cellPos, clickedCell)
-        elCell.style.background = 'red'
         onLoseLife()
         return
     }
-    // console.log('BEFORE ENTER clickedCell', clickedCell)
-    showCell(cellPos, clickedCell)
-    clickedCell.isShown = true
 
     if (!clickedCell.minesAroundCount) {
         expandShown(gBoard, elCell, i, j)
     }
+    console.log('gGame.shownCount', gGame.shownCount)
+
+    if (checkVictory()) onVictory()
 }
 
 
 // Convert a location object {i, j} to a selector and render a value in that element
-function renderCell(location, value) {
+function renderCell(location, value, playerClicked) {
     const cellSelector = '.' + getClassName(location) // .cell-i-j
     const elCell = document.querySelector(cellSelector)
-    if (value === MINE) {
-        elCell.style.backgroundcolor= 'red'
+    if (value === MINE && playerClicked) {
+        elCell.style.backgroundColor= 'red'
     }
     elCell.innerHTML = value
 
   }
 
-function showCell(cellPos, clickedCell) {
-    // console.log('AFTER ENTER clickedCell', clickedCell)
-    if (clickedCell === MINE) {
-        renderCell(cellPos, MINE)
+function showCell(cellPos, cell, playerClicked) {
+    // console.log('AFTER ENTER cell', cell)
+    if (cell.isMine) {
+        renderCell(cellPos, MINE, playerClicked)
         return
-    } else if (clickedCell.minesAroundCount){
-        renderCell(cellPos, clickedCell.minesAroundCount)
+    } else if (cell.minesAroundCount){
+        renderCell(cellPos, cell.minesAroundCount)
     }
     //model
-    clickedCell.isShown = true
+    cell.isShown = true
     //DOM
     var elCell = document.querySelector(`.cell-${cellPos.i}-${cellPos.j}`)
     elCell.classList.add('shown')
@@ -171,21 +190,30 @@ function showCell(cellPos, clickedCell) {
 function placeMinesRand(board, numOfMines, allPossiblePos) {
     // var minePositions = []
     shuffle(allPossiblePos)
+    console.log('allPossiblePos', allPossiblePos)
     counter = 0
 
     while (counter < numOfMines) {
         var randPos = allPossiblePos.pop()
+        console.log('randPos', randPos)
+        //model
         board[randPos.i][randPos.j].isMine = true
+        //DOM
+        var elCell = document.querySelector(`.cell-${randPos.i}-${randPos.j}`)
+        elCell.classList.add('mine')
         counter++
         // minePositions.push({i: randPos.i, j: randPos.j})
     }
+    console.log('breakpoint')
     // return minePositions
 }
 
 function showMines() {
     for (var i = 0; i < gBoard.length; i++) {
         for (var j = 0; j < gBoard[i].length; j++) {
-            if (gBoard[i][j].isMine) showCell({i, j}, MINE)
+            if (gBoard[i][j].isMine){
+                showCell({i, j}, gBoard[i][j])
+            }
         }
     }
 }
@@ -197,13 +225,16 @@ function chooseDiffi(size, mines) {
 }
 
 function onCellMarked(elCell, i, j) {
-    // console.log('elCell', elCell)
+    console.log('elCell', elCell)
 
     if (gBoard[i][j].isShown) return
 
     elCell.classList.toggle('marked')
-    if (elCell.classList.contains('marked')) {
+
+    if (isCellMarked(elCell)) {
+        gBoard[i][j].isMarked = true
         renderCell({i,j}, FLAG)
+        if (checkVictory()) onVictory()
     } else {
         renderCell({i,j}, '')
     }
@@ -229,16 +260,43 @@ function shownCount() {
     console.log('gGame.shownCount', gGame.shownCount)
 }
 
+function onFirstClicked(cellPos) {
+    gGame.isFirstClick = false
+    boardPlacement(cellPos)
+    startTimer()
+}
 
 function checkGameOver() {
-    return (gLevel.LIVES === 0)
+    return gLevel.LIVES === 0
+}
+function checkVictory() {
+    console.log('checkShown()', checkShown())
+    console.log('checkMarked()', checkMarked())
+    return (checkShown() && checkMarked())
+}
+
+function checkShown() {
+    return gGame.shownCount === (gLevel.SIZE**2 - gLevel.MINES)
+}
+
+function checkMarked() {
+    var markedMines = 0
+    for (var i = 0; i < gBoard.length; i++) {
+        for (var j = 0; j < gBoard.length; j++) {
+            if(gBoard[i][j].isMine && gBoard[i][j].isMarked) markedMines++
+        }
+    }
+    console.log('markedMines', markedMines)
+    return !(markedMines-gLevel.MINES)
 }
 
 function onLoseLife() {
     gGame.isOn = false
     gLevel.LIVES--
+    document.querySelector('.lives').innerHTML = `Lives Left: ${gLevel.LIVES}`
     showMines()
-    // stop timer
+    clearInterval(gIntervalId)
+
     if (checkGameOver())
     {
         onGameOver()
@@ -249,25 +307,70 @@ function onLoseLife() {
 }
 
 function onGameOver() {
-    document.querySelector('.game-over').style.display = 'block'
+    document.querySelector('.game-ends').innerHTML = 'YOU LOST NESHAMA!'
+    document.querySelector('.game-ends').style.display = 'block'
+    smileyHandle('game-over')
 }
 
+function onVictory() {
+    gGame.isOn = false
+    clearInterval(gIntervalId)
+    document.querySelector('.game-ends').innerHTML = 'YOU WIN CAPARA!'
+    document.querySelector('.game-ends').style.display = 'block'
+    smileyHandle('victory')
+}
 
 function closeModal() {
-    document.querySelector('.modal').style.display = 'none'
+    document.querySelector('.life-lost-modal').style.display = 'none'
+    onInit()
 }
 
 function openModal(msg) {
-    var elModal = document.querySelector('.modal')
+    var elModal = document.querySelector('.life-lost-modal')
     elModal.style.display = 'block'
     elModal.innerHTML = msg
 }
 
+function onSmileyClick() {
+    if(!gGame.isOn) return
+    // gLevel.LIVES = 3
+    // closeModals()
+    onInit()
+}
 
-// function smileyHandling() {
-// }
+function smileyHandle(occurance) {
+    if (occurance === 'normal') {
+        document.querySelector('.smiley').innerHTML = SMILEY_NORM
+    }else if (occurance === 'game-over') {
+        document.querySelector('.smiley').innerHTML = SMILEY_LOSE
+    } else if (occurance === 'victory') {
+        document.querySelector('.smiley').innerHTML = SMILEY_WIN
+    }
+}
 
-// bugs:
-// shownCount bugged
+function removeFirstClickPos(allPossiblePos, firstClickPos) {
+    for (var i = 0; i < allPossiblePos.length; i++) {
+        if(allPossiblePos[i].i === firstClickPos.i && allPossiblePos[i].j === firstClickPos.j) {
+            var FirstClickPos = allPossiblePos.splice(i, 1)
+            console.log('FirstClickPos', FirstClickPos)
+        }
+    }
+}
 
-// modal types: you win, you lose (0 lives), you lost a life
+function toggleDarkMode() {
+    var icon
+
+    if(gGame.isDarkMode) {
+        gGame.isDarkMode = false
+        icon = '🌒'
+    } else {
+        gGame.isDarkMode = true
+        icon = '🌖'
+    }
+    document.querySelector('.dark-mode-btn').innerHTML = icon
+
+    for (var i = 0; i < DARKMODE_SELECTORS.length; i++) {
+        console.log('elementos', document.querySelector(DARKMODE_SELECTORS[0]))
+        document.querySelector(DARKMODE_SELECTORS[i]).classList.toggle('dark-mode')
+    }
+}

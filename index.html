@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/main.css">
     <title>Minesweeper</title>
 </head>
-<body background="img/background2.jpg" onload="onInit()">
+<body background="img/explo-background.jpg" onload="onInit()">
 
     <div class="diffibuttons">
         <button class="diffibtn diff1" onclick="chooseDiffi(4, 2)">Beginner (2 Mines)</button>
@@ -16,22 +16,29 @@
         <button class="diffibtn diff3" onclick="chooseDiffi(12, 32)">Expert (32 Mines)</button>
     </div>
     <!-- <button class="class-toggle-test" onclick="onCellMarked()">toggle-test</button> -->
+
     <button class="shown-counter-test" onclick="shownCount()">showncount-test</button>
 
-    <div class="timer"></div>
+    <div class="above-board">
+        <button class="dark-mode-btn" onclick="toggleDarkMode()">🌒</button>
+        <div class="timer">0</div>
+        <div class="lives">Lives Left: 3</div>
+    </div>
+
+    <button class="smiley" onclick="onSmileyClick()">😃</button>
     <table>
+
         <tbody class="board"></tbody>
     </table>
 
-    <div class="game-over">Game Over</div>
+    <div class="game-ends">Game Over</div>
 
-    <div class="modal" onclick="onInit()">
+    <div class="life-lost-modal" onclick="closeModal()">
         <h3 class="msg"></h3>
         <button class="restart-btn" onclick="onInit()">Play Again</button>
     </div>
 
-    <div class="smiley"></div>
-
+    <!-- <div class="smiley"></div> -->
 
     <footer>
         <div>Nitzan Pe'er</div>

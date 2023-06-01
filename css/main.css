@@ -1,8 +1,13 @@
+:root {
+    --dark-mode: black;
+    --original-color: rgb(163, 34, 180);
+}
+
 * {
     font-family: 'Aclonica';
 }
 
-html, body{
+html {
     height: 100%;
 }
 
@@ -29,49 +34,97 @@ td {
     font-size: 22px;
     width: 30px;
     height: 30px;
-    margin-top: 100px;
-    /* border-width: 10px; */
+    margin-top: 30px;
 }
 
 table {
     border-width: 10px;
+    border-color:  rgb(163, 34, 180);
 }
 
 td {
+    border-width: 2px;
     padding: 15px;
     cursor: pointer;
 }
 
+td:hover {
+    background-color: white;
+}
+
 .diffibuttons {
-    margin-bottom: 40px;
-    margin-top: 60px;
+    margin-bottom: 35px;
+    margin-top: 35px;
+    /* padding: 30px; */
 }
 
 .diffibtn {
     border-radius: 15px;
-    font-size: 20px;
-
+    font-size: 25px;
     cursor: pointer;
+    padding: 6px;
+    background-color: rgb(163, 34, 180);
+
+    outline: none;
+    /* border: none; */
+    box-shadow: 0 9px #999;
 }
 
+.diffibtn:hover {
+    background-color: #ae00ff
+}
+
+.diffibtn:active {
+    background-color: rgb(163, 34, 180);
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
 
 .shown {
     background-color: white;
 }
 
+.above-board {
+    margin-left: 160px;
+}
+
 .timer {
+    display: inline-block;
     margin: auto;
     text-align: center;
-    width: 10%;
+    width: 5%;
     height: auto;
-    margin-top: 40px;
+    margin-top: 10px;
     margin-bottom: 20px;
     font-size: 30px;
     color: white;
     background-color: black;
+    margin-right: 60px;
 }
 
-.modal, .game-over {
+.lives {
+    display: inline-block;
+    margin-right: 50px;
+    background-color: rgb(163, 34, 180);
+    border-radius: 15px;
+    /* border-width: 1px; */
+    padding: 1%;
+    width: 10%;
+    font-size: 25px;
+}
+
+.smiley {
+    height: 70px;
+    width: 70px;
+    border-radius: 50%;
+    font-size: 30px;
+    border-color: purple;
+    border-width: 5px;
+    background-color: gray;
+    cursor: pointer;
+}
+
+.life-lost-modal, .game-ends {
     display: none;
     text-align: center;
     margin: auto;
@@ -84,7 +137,7 @@ td {
     margin-top: 30px;
     border-radius: 20px;
     cursor: pointer;
-  }
+}
 
 footer {
     position: absolute;
@@ -102,15 +155,31 @@ footer div{
     margin: auto;
     border-radius: 20px;
     padding: 20px;
+    margin-right: 1000px;
 }
 
-.game-over {
+.game-ends {
     padding: 20px;
     display: none;
     font-size: 50px;
     background-color: red;
+    border-color: black;
+    width: 300px;
 }
 
 .shown-counter-test {
     display: none;
+}
+
+.dark-mode-btn {
+    cursor: pointer;
+    background-color: black;
+    font-size: 50px;
+    margin-right: 70px;
+}
+
+.dark-mode {
+    background-color: black !important;
+    border-color: black !important;
+    color: white !important;
 }
