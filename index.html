@@ -1,50 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <link rel="stylesheet" href="css/main.css">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/main.css">
-    <title>Minesweeper</title>
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <title>MineSweeper</title>
 </head>
-<body background="img/explo-background.jpg" onload="onInit()">
 
-    <div class="diffibuttons">
-        <button class="diffibtn diff1" onclick="chooseDiffi(4, 2)">Beginner (2 Mines)</button>
-        <button class="diffibtn diff2" onclick="chooseDiffi(8, 14)">Medium (14 Mines)</button>
-        <button class="diffibtn diff3" onclick="chooseDiffi(12, 32)">Expert (32 Mines)</button>
-    </div>
-    <!-- <button class="class-toggle-test" onclick="onCellMarked()">toggle-test</button> -->
+<body onload="onInit()">
+    <h1>minesweeper <img src="img/mine.png" alt=""></h1>
+    <button onclick="onDifficulty(4,2)">easy</button> <button onclick="onDifficulty(8,14)">Medium</button> <button
+        onclick="onDifficulty(12,32)">Hard</button> <button onclick="onDarkMode()">Dark Mode 🌚</button>
+    <hr>
+    <button class="flags">🚩 2</button><button onclick="onReset()" class="happy">🙂</button><button
+        class="lives"></button>
+    <br>
+    <br>
+    <div class="timer"></div>
+    <table oncontextmenu="return false;" class=" game-board"></table>
+    <br>
+    <br>
+    <br>
+    <br>
 
-    <button class="shown-counter-test" onclick="shownCount()">showncount-test</button>
-
-    <div class="above-board">
-        <button class="dark-mode-btn" onclick="toggleDarkMode()">🌒</button>
-        <div class="timer">0</div>
-        <div class="lives">Lives Left: 3</div>
-    </div>
-
-    <button class="smiley" onclick="onSmileyClick()">😃</button>
-    <table>
-
-        <tbody class="board"></tbody>
-    </table>
-
-    <div class="game-ends">Game Over</div>
-
-    <div class="life-lost-modal" onclick="closeModal()">
-        <h3 class="msg"></h3>
-        <button class="restart-btn" onclick="onInit()">Play Again</button>
-    </div>
-
-    <!-- <div class="smiley"></div> -->
-
-    <footer>
-        <div>Nitzan Pe'er</div>
-    </footer>
-
-    <script src="js/game.js"></script>
-    <script src="js/utils.js"></script>
+    <footer>Yaron levy &copy;</footer>
+    <script src="js/main.js"></script>
 </body>
+
 </html>

@@ -1,185 +1,102 @@
-:root {
-    --dark-mode: black;
-    --original-color: rgb(163, 34, 180);
-}
-
-* {
-    font-family: 'Aclonica';
-}
-
-html {
-    height: 100%;
-}
-
 body {
     text-align: center;
-    background-size: cover;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-repeat: no-repeat;
+    background-color: rgb(245, 245, 245);
+
 }
 
-table,
-tr,
+h1 {
+    font-size: 50px;
+}
+
+h1 img {
+    height: 20px;
+}
+
+.game-board,
 td {
-    table-layout: fixed;
-    width: 100%;
-    min-width: max-content;
-    border: 1px solid black;
+    border: 2px solid black;
     border-collapse: collapse;
-    background-color: gray;
-    border-color: black;
     margin: auto;
-    font-size: 22px;
-    width: 30px;
-    height: 30px;
     margin-top: 30px;
+    color: aliceblue;
 }
 
-table {
-    border-width: 10px;
-    border-color:  rgb(163, 34, 180);
+.game-board td {
+    height: 20px;
+    width: 20px;
+    font-weight: 900;
+    /* background-color: #e2e2e2; */
 }
 
-td {
-    border-width: 2px;
-    padding: 15px;
-    cursor: pointer;
+.hidden {
+    opacity: 0;
+    /* content-visibility: hidden; */
 }
 
-td:hover {
-    background-color: white;
+
+
+.empty {
+    background-color: #8b8b8b;
 }
 
-.diffibuttons {
-    margin-bottom: 35px;
-    margin-top: 35px;
-    /* padding: 30px; */
+.dead {
+    background-color: crimson;
 }
 
-.diffibtn {
-    border-radius: 15px;
-    font-size: 25px;
-    cursor: pointer;
-    padding: 6px;
-    background-color: rgb(163, 34, 180);
-
-    outline: none;
-    /* border: none; */
-    box-shadow: 0 9px #999;
-}
-
-.diffibtn:hover {
-    background-color: #ae00ff
-}
-
-.diffibtn:active {
-    background-color: rgb(163, 34, 180);
-    box-shadow: 0 5px #666;
-    transform: translateY(4px);
-}
-
-.shown {
-    background-color: white;
-}
-
-.above-board {
-    margin-left: 160px;
-}
-
-.timer {
-    display: inline-block;
-    margin: auto;
-    text-align: center;
-    width: 5%;
-    height: auto;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    font-size: 30px;
-    color: white;
-    background-color: black;
-    margin-right: 60px;
-}
-
-.lives {
-    display: inline-block;
-    margin-right: 50px;
-    background-color: rgb(163, 34, 180);
-    border-radius: 15px;
-    /* border-width: 1px; */
-    padding: 1%;
-    width: 10%;
-    font-size: 25px;
-}
-
-.smiley {
-    height: 70px;
-    width: 70px;
-    border-radius: 50%;
-    font-size: 30px;
-    border-color: purple;
-    border-width: 5px;
-    background-color: gray;
-    cursor: pointer;
-}
-
-.life-lost-modal, .game-ends {
-    display: none;
-    text-align: center;
-    margin: auto;
-    border: solid 3px grey;
-    width: 220px;
-    height: auto;
-    background-color: rgb(222, 226, 228);
-    color: black;
-    font-size: 32px;
-    margin-top: 30px;
-    border-radius: 20px;
-    cursor: pointer;
+.flag {
+    font-size: 12px;
 }
 
 footer {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
+    background-color: #e2e2e2;
+    border-top: 3px solid #030303;
+    height: 30px;
+    font: bold;
+    position: fixed;
+    bottom: 0;
+
+    width: 100%;
 }
 
-footer div{
-    text-align: center;
-    display: block;
-    font-size: 30px;
-    color: white;
-    background-color: black;
-    margin: auto;
-    border-radius: 20px;
-    padding: 20px;
-    margin-right: 1000px;
+button {
+    color: aliceblue;
+    border: 3px solid black;
+    background-color: rgb(141, 135, 135);
+    height: 30px;
+    /* width: 120px; */
+    border-radius: 40px;
+    font-size: 17px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transition: transform 0.3s;
 }
 
-.game-ends {
-    padding: 20px;
-    display: none;
-    font-size: 50px;
-    background-color: red;
-    border-color: black;
-    width: 300px;
-}
-
-.shown-counter-test {
-    display: none;
-}
-
-.dark-mode-btn {
+button:hover {
+    background-color: silver;
     cursor: pointer;
-    background-color: black;
-    font-size: 50px;
-    margin-right: 70px;
+    transform: translate(+2px, +2px);
 }
 
 .dark-mode {
-    background-color: black !important;
-    border-color: black !important;
-    color: white !important;
+    background-color: rgb(87, 87, 87);
+}
+
+.lives {
+    margin-left: 5px;
+}
+
+.flags {
+    margin-right: 5px;
+}
+
+.timer {
+    font-size: 20px;
+    color: black;
+    padding: 10px 20px;
+    border-radius: 5px;
+
+}
+
+.timer::before {
+    content: "⏱";
+    margin-right: 5px;
 }
