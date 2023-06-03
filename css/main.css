@@ -1,102 +1,244 @@
+:root {
+    --dark-mode: black;
+    --original-color: rgb(163, 34, 180);
+}
+
+html {
+    height: 100%;
+}
+
 body {
+    margin: 0 auto;
+    padding: 0;
+    background: url(../img/explo-background.jpg) no-repeat center center fixed;
     text-align: center;
-    background-color: rgb(245, 245, 245);
-
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
 }
 
-h1 {
-    font-size: 50px;
+.first-row {
+    margin-bottom: 35px;
+    margin-top: 35px;
 }
 
-h1 img {
-    height: 20px;
+.second-row {
+    margin-left: 58px;
 }
 
-.game-board,
-td {
-    border: 2px solid black;
-    border-collapse: collapse;
-    margin: auto;
-    margin-top: 30px;
-    color: aliceblue;
+.third-row {
+    margin-left: 90px;
 }
 
-.game-board td {
-    height: 20px;
-    width: 20px;
-    font-weight: 900;
-    /* background-color: #e2e2e2; */
-}
-
-.hidden {
-    opacity: 0;
-    /* content-visibility: hidden; */
-}
-
-
-
-.empty {
-    background-color: #8b8b8b;
-}
-
-.dead {
-    background-color: crimson;
-}
-
-.flag {
-    font-size: 12px;
-}
-
-footer {
-    background-color: #e2e2e2;
-    border-top: 3px solid #030303;
-    height: 30px;
-    font: bold;
-    position: fixed;
-    bottom: 0;
-
-    width: 100%;
-}
-
-button {
-    color: aliceblue;
-    border: 3px solid black;
-    background-color: rgb(141, 135, 135);
-    height: 30px;
-    /* width: 120px; */
-    border-radius: 40px;
-    font-size: 17px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    transition: transform 0.3s;
-}
-
-button:hover {
-    background-color: silver;
+.diffibtn {
+    border-radius: 15px;
+    font-size: 25px;
     cursor: pointer;
-    transform: translate(+2px, +2px);
+    padding: 6px;
+    background-color: rgb(163, 34, 180);
+    font-family: 'Aclonica';
+
+    outline: none;
+    box-shadow: 0 9px #999;
 }
 
-.dark-mode {
-    background-color: rgb(87, 87, 87);
+.diffibtn:hover, .remove-mines-btn:hover, .safe-click-btn:hover {
+    background-color: #ae00ff;
+    transition: 600ms;
 }
 
-.lives {
-    margin-left: 5px;
+.diffibtn:active {
+    background-color: rgb(163, 34, 180);
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
 }
 
-.flags {
-    margin-right: 5px;
+table,
+tr,
+td {
+    table-layout: fixed;
+    width: 100%;
+    min-width: max-content;
+    border: 1px solid black;
+    border-collapse: collapse;
+    border-color: black;
+    margin: auto;
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    margin-top: 30px;
+}
+
+table {
+    border-width: 10px;
+    border-color: rgb(163, 34, 180);
+    background-color: #ffffff2a;
+}
+
+td {
+    border-width: 2px;
+    padding: 15px;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+td:hover {
+    background-color: white;
+    transition: 1000ms;
+}
+
+.shown {
+    background-color: rgb(180, 180, 180);
 }
 
 .timer {
-    font-size: 20px;
+    display: inline-block;
+    margin: auto;
+    text-align: center;
+    width: 5%;
+    height: auto;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-size: 30px;
     color: black;
-    padding: 10px 20px;
-    border-radius: 5px;
-
+    background-color: rgb(163, 34, 180);
+    border-color: black;
+    border-radius: 15px;
+    margin-right: 60px;
 }
 
-.timer::before {
-    content: "⏱";
-    margin-right: 5px;
+.lives {
+    display: inline-block;
+    margin-right: 50px;
+    background-color: rgb(163, 34, 180);
+    border-radius: 15px;
+    /* border-width: 1px; */
+    padding: 1%;
+    width: 4%;
+    font-size: 25px;
+    padding: 10px;
+}
+
+.smiley {
+    height: 70px;
+    width: 70px;
+    border-radius: 50%;
+    font-size: 30px;
+    border-color: purple;
+    border-width: 5px;
+    background-color: rgba(128, 128, 128, 0);
+    cursor: pointer;
+    margin-left: 30px;
+    margin-right: 10px;
+}
+
+.life-lost-modal, .game-ends-modal {
+    display: none;
+    text-align: center;
+    margin: auto;
+    border: solid 3px grey;
+    width: 220px;
+    height: auto;
+    background-color: rgb(222, 226, 228);
+    color: black;
+    font-size: 32px;
+    margin-top: 30px;
+    border-radius: 20px;
+    cursor: pointer;
+    padding: 10px;
+}
+
+footer {
+    position: relative;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+footer div{
+    text-align: center;
+    display: block;
+    font-size: 30px;
+    font-family: Times New Roman;
+    color: white;
+    background-color: black;
+    margin: auto;
+    border-radius: 20px;
+    padding: 20px;
+    max-width: 200px;
+    margin-top: 20px;
+}
+
+.game-ends-modal {
+    padding: 20px;
+    display: none;
+    font-size: 50px;
+    background-color: red;
+    border-color: black;
+    width: 300px;
+}
+
+.shown-counter-test {
+    display: none;
+}
+
+.dark-mode-btn {
+    cursor: pointer;
+    background-color: rgba(163, 34, 180, 0);
+    outline: none;
+    border: none;
+    font-size: 50px;
+    margin-right: 70px;
+    padding: 0.2%;
+    border-radius: 40px;
+}
+
+.dark-mode table,
+.dark-mode .diffibtn,
+.dark-mode .lives,
+.dark-mode .smiley,
+.dark-mode .timer,
+.dark-mode .remove-mines-btn,
+.dark-mode .safe-click-btn,
+.dark-mode .dark-mode-btn {
+    background-color: rgb(22, 22, 22);
+    border-color:  rgb(255, 255, 255);
+    color: white;
+}
+
+.dark-mode .diffibtn:hover {
+    background-color: rgb(35,35,35);
+}
+
+.dark-mode table {
+    background-color: rgba(22, 22, 22, 0.4);
+}
+
+.remove-mines-btn, .safe-click-btn {
+    background-color: rgb(163, 34, 180);
+    border-radius: 20px;
+    font-size: 20px;
+    font-family: 'Aclonica';
+    margin-left: 30px;
+    cursor: pointer;
+}
+
+.hint-btn1, .hint-btn2, .hint-btn3 {
+    background-color: #00000000;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.hint-btn3 {
+    margin-right: 20px;
+}
+
+.safeMarked {
+    background-color: green;
+}
+
+h1 {
+    background: rgba(255,255,255,0.4);
 }

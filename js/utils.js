@@ -23,7 +23,7 @@ function renderTimer() {
 }
 
 function startTimer() {
-    gIntervalId = setInterval(() => {
+    gIntervalIdTimer = setInterval(() => {
     gTimer += 1000
     renderTimer()
     }, 1000)
@@ -32,7 +32,7 @@ function startTimer() {
 function restartTimer() {
     gTimer = 0
     renderTimer()
-    clearInterval(gIntervalId)
+    clearInterval(gIntervalIdTimer)
 }
 
 function countNegs(cellI, cellJ, board) {
@@ -48,12 +48,22 @@ function countNegs(cellI, cellJ, board) {
     return negsCount
 }
 
-function playSound() {
-    const sound = new Audio('SOUND_PATH')
+function playKol() {
+    const sound = new Audio('sounds/kol_hakavod.mp3')
     sound.play()
-  }
+}
 
-function createPosArr(board) {
+function playOysh() {
+    const sound = new Audio('sounds/oysh.mp3')
+    sound.play()
+}
+
+function playLo() {
+    const sound = new Audio('sounds/lo_nora.mp3')
+    sound.play()
+}
+
+function createAllPosArr(board) {
     allPossiblePos = []
     for (var i = 0; i < board.length; i++) {
         for (var j = 0; j < board[i].length; j++) {
@@ -61,6 +71,18 @@ function createPosArr(board) {
         }
     }
     return allPossiblePos
+}
+
+safePosArr = []
+function createSafePosArr(board) {
+    for (var i = 0; i < board.length; i++) {
+        for (var j = 0; j < board[i].length; j++) {
+            if(gBoard[i][j].isShown) continue
+            if(gBoard[i][j].isMine) continue
+            safePosArr.push({i, j})
+        }
+    }
+    return safePosArr
 }
 
 function shuffle(array) {
